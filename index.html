@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Recargas de diamantes Free Fire Latam. Precios exclusivos, entregas rápidas y seguras.">
+<title>Diamond King - Recargas de Diamantes Free Fire</title>
+<style>
+:root{color-scheme:dark;--bg:#0c0c11;--card:#16161f;--line:#2a2a38;--text:#f4f4f7;--muted:#9b9bab;--acc:#ff6a00;--acc2:#ffb400;--ok:#22c55e;--bad:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#2a1604,var(--bg) 55%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.wrap{max-width:600px;margin:0 auto;padding:18px 14px 70px}
+h1{text-align:center;font-size:1.6rem;margin:14px 0 4px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{text-align:center;color:var(--muted);margin:0 0 6px;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px}
+h2{font-size:1.02rem;margin:0 0 12px;display:flex;gap:10px;align-items:center}
+h2 b{background:var(--acc);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.85rem;flex:none}
+input{width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:1rem;margin-bottom:8px}
+input:focus{outline:2px solid var(--acc);border-color:transparent}
+.err{color:var(--bad);font-size:.84rem;min-height:1.1em;margin:0}.ok{color:var(--ok)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.opt{border:2px solid var(--line);background:var(--bg);color:var(--text);border-radius:13px;padding:12px 8px;text-align:center;cursor:pointer;font:inherit}
+.opt.sel{border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,106,0,.2)}
+.opt .n{font-weight:700}.opt .p{color:var(--acc2);font-weight:700;font-size:.92rem;margin-top:2px}
+.opt.full{grid-column:1/-1;text-align:left;display:flex;justify-content:space-between;padding:13px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:11px;margin-top:7px;background:var(--bg);font-size:.93rem}
+.row span:nth-child(2){font-weight:600;text-align:right;word-break:break-all;flex:1}
+.cp{background:var(--line);color:var(--text);border:0;border-radius:8px;padding:6px 10px;font:inherit;font-size:.8rem;cursor:pointer}
+.btn{display:block;width:100%;text-align:center;text-decoration:none;border:0;cursor:pointer;background:linear-gradient(90deg,var(--acc),var(--acc2));color:#111;font-weight:800;font-size:1.02rem;padding:15px;border-radius:14px;margin-top:12px;font-family:inherit}
+.btn.alt{background:transparent;border:1px solid var(--line);color:var(--text);font-weight:600}.btn:disabled{opacity:.5}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:1.1rem;margin-top:12px}
+.hint{color:var(--muted);font-size:.84rem;margin:8px 0 0}
+.code{font-size:1.5rem;font-weight:800;letter-spacing:2px;text-align:center;color:var(--acc2);background:var(--bg);border:1px dashed var(--acc);border-radius:12px;padding:12px;margin:10px 0}
+.hide{display:none}footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:26px}
+#prev{max-width:100%;border-radius:10px;margin-top:8px}
+</style></head><body><div class="wrap">
+<h1>💥 RECARGAS LATAM 💥</h1><p class="sub">Diamond King · Precios exclusivos, entregas rápidas y seguras ⚡</p>
+
+<div id="form">
+<section class="card"><h2><b>1</b>Tu ID de juego</h2><input id="uid" inputmode="numeric" maxlength="12" placeholder="Ej: 123456789" autocomplete="off"><p class="err" id="uidErr"></p><p class="hint">Lo ves en Free Fire tocando tu perfil. Nunca te pedimos contraseña.</p></section>
+<section class="card"><h2><b>2</b>Elegí tu pack</h2><div class="grid" id="packs"></div><p class="err" id="packErr"></p></section>
+<section class="card"><h2><b>3</b>Datos de contacto</h2><input id="name" placeholder="Tu nombre" autocomplete="name"><input id="phone" type="tel" placeholder="Tu teléfono / WhatsApp" autocomplete="tel"><input id="email" type="email" placeholder="Tu correo electrónico" autocomplete="email"><p class="err" id="contactErr"></p><p class="hint">Los usamos solo para avisarte de tu recarga.</p></section>
+<section class="card"><h2><b>4</b>Resumen</h2><div class="total"><span>Total a pagar</span><span id="total">—</span></div><p class="err" id="sendErr"></p><button class="btn" id="go" type="button">IR A PAGAR</button></section>
+</div>
+
+<div id="pay" class="hide">
+<section class="card"><h2><b>💳</b>Realizá el pago</h2><p style="margin:0">Tu código de pedido (guardalo):</p><div class="code" id="code"></div><div id="summary"></div>
+<p class="hint" style="margin-top:14px">Transferí el <strong>monto exacto</strong> a esta cuenta:</p><div id="payData"></div></section>
+<section class="card" id="upBox"><h2><b>📎</b>Subí tu comprobante</h2><p class="hint" style="margin:0 0 8px">Después de pagar, subí la captura o foto del comprobante.</p>
+<input id="file" type="file" accept="image/*"><img id="prev" class="hide" alt="Vista previa"><p class="err" id="upErr"></p><button class="btn" id="up" type="button">Enviar comprobante</button></section>
+<button class="btn alt" id="again" type="button">Hacer otro pedido</button>
+</div>
+
+<section class="card"><h2>🔍 Consultar estado de mi recarga</h2><input id="chk" placeholder="Tu código (ej: DK-AB12CD)" autocapitalize="characters"><button class="btn alt" id="chkBtn" type="button" style="margin-top:0">Consultar</button><p id="chkOut" class="hint"></p><button class="btn alt hide" id="chkUp" type="button">Subir comprobante de este pedido</button></section>
+<a class="btn alt" id="chan" target="_blank" rel="noopener" href="#">💬 Unirte a nuestro Canal / Grupo de WhatsApp</a>
+<footer>Sitio independiente, no afiliado a Garena. Free Fire es marca de sus respectivos dueños.</footer></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+var CFG={url:"https://flbofuhkajdmtmothhbo.supabase.co",key:"sb_publishable_Yc78T7CHNw_ncf3wRpGJiA_67POKoEH",
+canal:"https://whatsapp.com/channel/0029VbDyRyU8kyyOaUfW0s2B",moneda:"$",
+packs:[["110 💎",1650.79],["220 💎",3274.29],["330 💎",4825.43],["341 💎",4996.74],["440 💎",6584.37],["451 💎",7269.97],["572 💎",8352.75],["682 💎",9549.92],["792 💎",11531.85],["913 💎",13142.29],["1.023 💎",14298.02],["1.166 💎",14689.21],["2.398 💎",26589.30],["3.564 💎",39391.01],["4.246 💎",51810.71],["5.368 💎",58907.07],["6.160 💎",64121.04]],
+esp:[["🎟️ Pase Booyah",3250],["🔖 Tarjeta Semanal",7500],["🔖 Tarjeta Mensual",16800]],
+cuenta:[["Alias","thiago320.mp"],["Titular","Thiago Alexander Esquivel"],["CBU","0000003100093929543686"]]};
+var ST={esperando_pago:"⏳ Esperando tu pago",comprobante_enviado:"🧾 Comprobante recibido, lo estamos verificando",en_proceso:"⚙️ Recarga en proceso",completado:"✅ Recarga completada",cancelado:"❌ Pedido cancelado"};
+var $=function(i){return document.getElementById(i)},sb=null;
+try{sb=supabase.createClient(CFG.url,CFG.key)}catch(e){}
+var fmt=function(n){return CFG.moneda+n.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2})};
+var items=CFG.packs.map(function(x){return{n:x[0],p:x[1],f:0}}).concat(CFG.esp.map(function(x){return{n:x[0],p:x[1],f:1}})),selP=null,cur=null;
+items.forEach(function(it,i){var b=document.createElement("button");b.type="button";b.className="opt"+(it.f?" full":"");
+b.innerHTML=it.f?'<span class="n">'+it.n+'</span><span class="p">'+fmt(it.p)+'</span>':'<div class="n">'+it.n+'</div><div class="p">'+fmt(it.p)+'</div>';
+b.onclick=function(){selP=i;[].forEach.call($("packs").children,function(c){c.classList.remove("sel")});b.classList.add("sel");$("packErr").textContent="";$("total").textContent=fmt(it.p)};$("packs").appendChild(b)});
+$("uid").addEventListener("input",function(){this.value=this.value.replace(/\D/g,"");$("uidErr").textContent=""});
+$("chan").href=CFG.canal;
+function copy(t,b){var d=function(){var o=b.textContent;b.textContent="¡Copiado!";setTimeout(function(){b.textContent=o},1200)};
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(d,function(){prompt("Copiá:",t)})}else prompt("Copiá:",t)}
+function row(k,v,c){var r=document.createElement("div");r.className="row";var a=document.createElement("span");a.textContent=k;var b=document.createElement("span");b.textContent=v;r.appendChild(a);r.appendChild(b);
+if(c){var x=document.createElement("button");x.type="button";x.className="cp";x.textContent="Copiar";x.onclick=function(){copy(c,x)};r.appendChild(x)}return r}
+function newCode(){var c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",s="DK-";for(var i=0;i<6;i++)s+=c[Math.floor(Math.random()*c.length)];return s}
+function showPay(code,it,uid){cur=code;$("code").textContent=code;$("summary").innerHTML="";
+if(it){$("summary").appendChild(row("ID",uid));$("summary").appendChild(row("Pack",it.n));$("summary").appendChild(row("Total",fmt(it.p),String(it.p.toFixed(2))))}
+$("payData").innerHTML="";CFG.cuenta.forEach(function(c){$("payData").appendChild(row(c[0],c[1],c[1]))});
+$("form").classList.add("hide");$("pay").classList.remove("hide");$("upBox").classList.remove("hide");$("upErr").textContent="";window.scrollTo(0,0)}
+$("go").onclick=function(){var ok=true,uid=$("uid").value,ph=$("phone").value.replace(/\D/g,""),em=$("email").value.trim(),nm=$("name").value.trim();
+$("uidErr").textContent=uid.length<6?"Ingresá un ID válido (solo números)":"";if(uid.length<6)ok=false;
+if(selP===null){$("packErr").textContent="Seleccioná un pack";ok=false}
+var okc=nm&&ph.length>=8&&/^\S+@\S+\.\S+$/.test(em);$("contactErr").textContent=okc?"":"Completá nombre, teléfono y un correo válido";if(!okc)ok=false;
+if(!ok)return;if(!sb){$("sendErr").textContent="No se pudo conectar. Recargá la página.";return}
+var it=items[selP],code=newCode(),b=$("go");b.disabled=true;b.textContent="Generando pedido…";$("sendErr").textContent="";
+sb.from("orders").insert({code:code,player_id:uid,pack:it.n,amount:it.p,customer_name:nm,phone:$("phone").value.trim(),email:em}).then(function(r){
+b.disabled=false;b.textContent="IR A PAGAR";if(r.error){$("sendErr").textContent="No pudimos crear tu pedido. Probá de nuevo. ("+(r.error.message||"error")+")";return}
+try{localStorage.setItem("dk_last",code)}catch(e){}showPay(code,it,uid)})};
+$("file").onchange=function(){var f=this.files[0],p=$("prev");if(f&&f.type.indexOf("image/")===0){p.src=URL.createObjectURL(f);p.classList.remove("hide")}else p.classList.add("hide")};
+$("up").onclick=function(){var f=$("file").files[0],e=$("upErr");e.className="err";
+if(!f){e.textContent="Elegí la imagen de tu comprobante";return}if(f.type.indexOf("image/")!==0){e.textContent="Tiene que ser una imagen";return}if(f.size>6*1024*1024){e.textContent="La imagen pesa más de 6 MB";return}
+var b=$("up");b.disabled=true;b.textContent="Subiendo…";e.textContent="";var ext=(f.name.split(".").pop()||"jpg").replace(/[^a-z0-9]/gi,"").toLowerCase()||"jpg",path=cur+"/"+Date.now()+"."+ext;
+sb.storage.from("comprobantes").upload(path,f,{contentType:f.type}).then(function(r){if(r.error)throw r.error;return sb.rpc("enviar_comprobante",{c:cur,p:path})}).then(function(r){
+if(r.error)throw r.error;b.disabled=false;b.textContent="Enviar comprobante";e.className="err ok";e.textContent="✅ Comprobante enviado. Lo verificamos y te avisamos. Consultá el estado con tu código.";$("file").value="";$("prev").classList.add("hide")}).catch(function(){
+b.disabled=false;b.textContent="Enviar comprobante";e.textContent="No se pudo subir. Probá de nuevo."})};
+$("again").onclick=function(){$("pay").classList.add("hide");$("form").classList.remove("hide");window.scrollTo(0,0)};
+$("chkBtn").onclick=function(){var c=$("chk").value.trim().toUpperCase(),o=$("chkOut");$("chkUp").classList.add("hide");if(!c){o.textContent="Ingresá tu código";return}
+o.textContent="Consultando…";sb.rpc("estado_pedido",{c:c}).then(function(r){if(r.error||!r.data||!r.data.length){o.textContent="No encontramos ese código. Revisalo.";return}
+var d=r.data[0];o.textContent=(ST[d.status]||d.status)+" · "+d.pack+" · "+fmt(Number(d.amount));
+if(d.status==="esperando_pago"||d.status==="comprobante_enviado"){$("chkUp").classList.remove("hide");$("chkUp").onclick=function(){showPay(c,null,"");$("summary").appendChild(row("Pack",d.pack));$("summary").appendChild(row("Total",fmt(Number(d.amount)),Number(d.amount).toFixed(2)))}}})};
+try{var l=localStorage.getItem("dk_last");if(l)$("chk").value=l}catch(e){}
+</script></body></html>

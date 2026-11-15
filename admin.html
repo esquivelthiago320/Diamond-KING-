@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Panel · Diamond King</title>
+<style>
+:root{color-scheme:dark;--bg:#0c0c11;--card:#16161f;--line:#2a2a38;--text:#f4f4f7;--muted:#9b9bab;--acc:#ff6a00;--acc2:#ffb400}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+.wrap{max-width:640px;margin:0 auto;padding:16px 14px 60px}h1{font-size:1.3rem;margin:8px 0 12px}
+input,select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:1rem;margin-bottom:8px}
+button{border:0;border-radius:11px;padding:11px 14px;font:inherit;font-weight:700;cursor:pointer;background:linear-gradient(90deg,var(--acc),var(--acc2));color:#111}
+button.alt{background:var(--line);color:var(--text)}button.bad{background:#ef4444;color:#fff}button.good{background:#22c55e;color:#06210f}
+.bar{display:flex;gap:8px;margin-bottom:10px}.bar select{margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:10px}
+.top{display:flex;justify-content:space-between;gap:8px;cursor:pointer}.top b{color:var(--acc2)}
+.tag{font-size:.75rem;padding:3px 8px;border-radius:99px;background:var(--line);white-space:nowrap}
+.sm{color:var(--muted);font-size:.85rem}.det{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+.f{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:.92rem}.f span:last-child{font-weight:600;text-align:right;word-break:break-all}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}img{max-width:100%;border-radius:10px;margin-top:8px}
+.err{color:#ef4444;font-size:.88rem;min-height:1.2em}.hide{display:none}
+</style></head><body><div class="wrap">
+<div id="login"><h1>🔐 Panel de administrador</h1><input id="em" type="email" placeholder="Correo" autocomplete="username"><input id="pw" type="password" placeholder="Contraseña" autocomplete="current-password"><p class="err" id="lerr"></p><button id="lbtn" style="width:100%">Entrar</button></div>
+<div id="app" class="hide"><div style="display:flex;justify-content:space-between;align-items:center"><h1>📦 Pedidos</h1><button class="alt" id="out">Salir</button></div>
+<div class="bar"><select id="flt"><option value="">Todos</option><option value="comprobante_enviado">Comprobante enviado</option><option value="esperando_pago">Esperando pago</option><option value="en_proceso">En proceso</option><option value="completado">Completados</option><option value="cancelado">Cancelados</option></select><button id="ref">Actualizar</button></div>
+<p class="err" id="aerr"></p><div id="list"></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+var sb=supabase.createClient("https://flbofuhkajdmtmothhbo.supabase.co","sb_publishable_Yc78T7CHNw_ncf3wRpGJiA_67POKoEH");
+var ST={esperando_pago:"Esperando pago",comprobante_enviado:"Comprobante enviado",en_proceso:"En proceso",completado:"Completado",cancelado:"Cancelado"};
+var $=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function fld(k,v){var r=el("div","f");r.appendChild(el("span","",k));r.appendChild(el("span","",v));return r}
+function show(on){$("login").classList.toggle("hide",on);$("app").classList.toggle("hide",!on);if(on)load()}
+$("lbtn").onclick=function(){$("lerr").textContent="";sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value}).then(function(r){if(r.error)$("lerr").textContent="No se pudo entrar: "+(r.error.message||"error");else show(true)})};
+$("out").onclick=function(){sb.auth.signOut().then(function(){show(false)})};
+$("ref").onclick=load;$("flt").onchange=load;
+sb.auth.getSession().then(function(r){if(r.data&&r.data.session)show(true)});
+function load(){var q=sb.from("orders").select("*").order("created_at",{ascending:false}).limit(200),f=$("flt").value;if(f)q=q.eq("status",f);
+$("aerr").textContent="";q.then(function(r){var L=$("list");L.innerHTML="";if(r.error){$("aerr").textContent="No se pudieron cargar los pedidos.";return}
+if(!r.data.length){L.appendChild(el("p","sm","No hay pedidos."));return}r.data.forEach(function(o){L.appendChild(card(o))})})}
+function card(o){var c=el("div","card"),t=el("div","top"),l=el("div");l.appendChild(el("b","",o.code));l.appendChild(el("div","sm",o.pack+" · $"+Number(o.amount).toLocaleString("es-AR")));
+l.appendChild(el("div","sm",new Date(o.created_at).toLocaleString("es-AR")));t.appendChild(l);t.appendChild(el("span","tag",ST[o.status]||o.status));c.appendChild(t);
+var d=el("div","det hide");c.appendChild(d);var done=false;t.onclick=function(){d.classList.toggle("hide");if(done)return;done=true;
+d.appendChild(fld("ID del jugador",o.player_id));d.appendChild(fld("Nombre",o.customer_name));d.appendChild(fld("Teléfono",o.phone));d.appendChild(fld("Correo",o.email));
+d.appendChild(fld("Pack",o.pack));d.appendChild(fld("Monto a pagar","$"+Number(o.amount).toLocaleString("es-AR",{minimumFractionDigits:2})));
+var box=el("div");d.appendChild(box);
+if(o.receipt_path){box.appendChild(el("p","sm","Comprobante:"));sb.storage.from("comprobantes").createSignedUrl(o.receipt_path,3600).then(function(r){if(r.error||!r.data){box.appendChild(el("p","err","No se pudo abrir el comprobante"));return}
+var a=el("a");a.href=r.data.signedUrl;a.target="_blank";a.rel="noopener";var im=el("img");im.src=r.data.signedUrl;im.alt="Comprobante";a.appendChild(im);box.appendChild(a)})}
+else box.appendChild(el("p","sm","Todavía no subió comprobante."));
+var A=el("div","acts");[["en_proceso","En proceso","alt"],["completado","Completado","good"],["cancelado","Cancelar","bad"]].forEach(function(s){var b=el("button",s[2],s[1]);
+b.onclick=function(){if(s[0]==="cancelado"&&!confirm("¿Cancelar este pedido?"))return;b.disabled=true;sb.from("orders").update({status:s[0]}).eq("id",o.id).then(function(r){
+if(r.error){alert("No se pudo actualizar");b.disabled=false;return}o.status=s[0];t.lastChild.textContent=ST[s[0]];b.disabled=false})};A.appendChild(b)});d.appendChild(A)};return c}
+</script></body></html>
